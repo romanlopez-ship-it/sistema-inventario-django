@@ -5,13 +5,13 @@
 {% block content %}
 <h2>Productos ({{ productos|length }})</h2>
 <ul>
-{% for pid, datos in productos.items %}
+{% for p in productos %}
     <li>
-        <a href="/productos/{{ pid }}/">{{ datos.nombre }}</a>
-        — ${{ datos.precio }}
+        <a href="/productos/{{ p.pk }}/">{{ p.nombre }}</a>
+        — ${{ p.precio }} | Stock: {{ p.stock }}
     </li>
 {% empty %}
-    <li>No hay productos registrados.</li>
+    <li>No hay productos. <a href="/admin/productos/producto/add/">Agregar producto</a>.</li>  
 {% endfor %}
 </ul>
 {% endblock %}

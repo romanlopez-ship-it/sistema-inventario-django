@@ -1,18 +1,28 @@
-"""Vistas de la aplicacion productos — Semana 3.
+"""
+Vistas de la aplicacion productos — Semana 3.
 
 Reemplaza HttpResponse con render() y plantillas Django.
 Hilo conector: "Historias -> vistas".
+
+Vistas de la aplicacion productos — Semana 4.
+
+Reemplaza el diccionario de ejemplo por consultas ORM reales.
+Hilo conector: "Modelar el dominio".
 """
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
+from .models import Producto
+
+'''
 # Datos de ejemplo (sin base de datos — se incorpora en Semana 4)
 PRODUCTOS_EJEMPLO: dict[int, dict] = {
     1: {"nombre": "Teclado USB",         "precio": 350.00},
     2: {"nombre": "Monitor 24 pulgadas", "precio": 3200.00},
     3: {"nombre": "Mouse inalambrico",   "precio": 280.00},
 }
+'''
 
 def bienvenida(request: HttpRequest) -> HttpResponse:
     """Devuelve la pagina principal usando la plantilla base.
@@ -27,7 +37,7 @@ def bienvenida(request: HttpRequest) -> HttpResponse:
 
 
 def lista_productos(request: HttpRequest) -> HttpResponse:
-    """Devuelve la lista de productos usando una plantilla Django.
+    """Devuelve todos los productos desde la base de datos.
 
     Args:
         request: Objeto HttpRequest generado por Django.
@@ -35,8 +45,8 @@ def lista_productos(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse renderizado con productos/lista.html.
     """
-    context = {"productos": PRODUCTOS_EJEMPLO}
-    return render(request, "productos/lista.html", context)
+    productos = Producto.objects.all()
+    return render(request, "productos/lista.html", {"productos": productos})
 
 
 def detalle_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
@@ -49,11 +59,12 @@ def detalle_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
     Returns:
         HttpResponse 200 con el detalle del producto, o 404 si no existe.
     """
-    producto = PRODUCTOS_EJEMPLO.get(producto_id)
-    if producto is None:
+    try:
+        producto = Producto.objects.get(pk=producto_id)
+    except Producto.DoesNotExist:    
         return HttpResponse(
             f"<h1>Producto {producto_id} no encontrado</h1>",
             status=404,
-        )       
-    context = {"producto_id": producto_id, "producto": producto}
-    return render(request, "productos/detalle.html", context)
+        )     
+    
+    return render(request, "productos/detalle.html", {"producto": producto},)
