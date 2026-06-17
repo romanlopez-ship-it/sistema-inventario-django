@@ -1,18 +1,24 @@
 """
-Vistas de la aplicacion productos — Semana 3.
+### Vistas de la aplicacion productos — Semana 3.
 
 Reemplaza HttpResponse con render() y plantillas Django.
 Hilo conector: "Historias -> vistas".
 
-Vistas de la aplicacion productos — Semana 4.
+### Vistas de la aplicacion productos — Semana 4.
 
 Reemplaza el diccionario de ejemplo por consultas ORM reales.
 Hilo conector: "Modelar el dominio".
+
+### Vistas de la aplicacion productos — Semana 5.
+
+Agrega la vista crear_producto con ModelForm y ciclo GET/POST.
+Hilo conector: "El primer incremento funcional".
 """
 
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
+from .forms import ProductoForm
 from .models import Producto
 
 '''
@@ -25,40 +31,18 @@ PRODUCTOS_EJEMPLO: dict[int, dict] = {
 '''
 
 def bienvenida(request: HttpRequest) -> HttpResponse:
-    """Devuelve la pagina principal usando la plantilla base.
-
-    Args:
-        request: Objeto HttpRequest generado por Django.
-
-    Returns:
-        HttpResponse renderizado con base.html.
-    """
+    """Devuelve la pagina principal del sistema."""
     return render(request, "base.html", {"titulo": "Bienvenido"})
 
 
 def lista_productos(request: HttpRequest) -> HttpResponse:
-    """Devuelve todos los productos desde la base de datos.
-
-    Args:
-        request: Objeto HttpRequest generado por Django.
-
-    Returns:
-        HttpResponse renderizado con productos/lista.html.
-    """
+    """Devuelve todos los productos desde la base de datos."""
     productos = Producto.objects.all()
     return render(request, "productos/lista.html", {"productos": productos})
 
 
 def detalle_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
-    """Devuelve el detalle de un producto segun su ID de URL.
-
-    Args:
-        request: Objeto HttpRequest generado por Django.
-        producto_id: Identificador entero capturado desde la URL.
-
-    Returns:
-        HttpResponse 200 con el detalle del producto, o 404 si no existe.
-    """
+    """Devuelve el detalle de un producto por su clave primaria."""
     try:
         producto = Producto.objects.get(pk=producto_id)
     except Producto.DoesNotExist:    
@@ -68,3 +52,17 @@ def detalle_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
         )     
     
     return render(request, "productos/detalle.html", {"producto": producto},)
+
+## Vista de creacion de productos (Semana 5)
+def crear_producto(request: HttpRequest) -> HttpResponse:
+    """Maneja la creacion de un nuevo producto con un formulario."""
+    if request.method == "POST":
+        form = ProductoForm(request.POST)
+        if form.is_valid():
+            form.save()  # Guarda el nuevo producto en la base de datos
+            return redirect("productos:lista")  # Redirige a la lista de productos
+    else:
+        form = ProductoForm()  # Formulario vacio para GET
+
+    return render(request, "productos/crear.html", {"form": form})
+

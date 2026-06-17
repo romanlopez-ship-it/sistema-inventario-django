@@ -7,5 +7,6 @@ app_name = "productos"          # namespace: evita colisiones entre apps
 urlpatterns = [
     path("",                             views.bienvenida,       name="bienvenida"),
     path("productos/",                   views.lista_productos,  name="lista"),
+    path("productos/nuevo/",             views.crear_producto,   name="crear"),
     path("productos/<int:producto_id>/", views.detalle_producto, name="detalle"),
 ]
