@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de productos{% endblock %}
+
+{% block content %}
+<h2>Productos ({{ productos|length }})</h2>
+<ul>
+{% for pid, datos in productos.items %}
+    <li>
+        <a href="/productos/{{ pid }}/">{{ datos.nombre }}</a>
+        — ${{ datos.precio }}
+    </li>
+{% empty %}
+    <li>No hay productos registrados.</li>
+{% endfor %}
+</ul>
+{% endblock %}

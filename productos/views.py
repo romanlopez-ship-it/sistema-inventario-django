@@ -1,8 +1,11 @@
-#from django.shortcuts import render
+"""Vistas de la aplicacion productos — Semana 3.
 
-# Create your views here.
+Reemplaza HttpResponse con render() y plantillas Django.
+Hilo conector: "Historias -> vistas".
+"""
 
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
 
 # Datos de ejemplo (sin base de datos — se incorpora en Semana 4)
 PRODUCTOS_EJEMPLO: dict[int, dict] = {
@@ -12,39 +15,28 @@ PRODUCTOS_EJEMPLO: dict[int, dict] = {
 }
 
 def bienvenida(request: HttpRequest) -> HttpResponse:
-    """Devuelve la pagina principal del sistema.
+    """Devuelve la pagina principal usando la plantilla base.
 
     Args:
         request: Objeto HttpRequest generado por Django.
 
     Returns:
-        HttpResponse con enlaces a las vistas disponibles.
+        HttpResponse renderizado con base.html.
     """
-    html = (
-        "<h1>Sistema de Inventario</h1>"
-        "<ul>"
-        "<li><a href='/productos/'>Ver lista de productos</a></li>"
-        "<li><a href='/productos/1/'>Ejemplo: detalle producto 1</a></li>"
-        "</ul>"
-    )
-    return HttpResponse(html)
+    return render(request, "base.html", {"titulo": "Bienvenido"})
 
 
 def lista_productos(request: HttpRequest) -> HttpResponse:
-    """Devuelve la lista completa de productos de ejemplo.
+    """Devuelve la lista de productos usando una plantilla Django.
 
     Args:
         request: Objeto HttpRequest generado por Django.
 
     Returns:
-        HttpResponse con un listado HTML de todos los productos.
+        HttpResponse renderizado con productos/lista.html.
     """
-    items = "".join(
-        f"<li><a href='/productos/{pid}/'>{datos['nombre']}</a></li>"
-        for pid, datos in PRODUCTOS_EJEMPLO.items()
-    )
-    html = f"<h1>Lista de productos ({len(PRODUCTOS_EJEMPLO)})</h1><ul>{items}</ul>"
-    return HttpResponse(html)
+    context = {"productos": PRODUCTOS_EJEMPLO}
+    return render(request, "productos/lista.html", context)
 
 
 def detalle_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
@@ -62,10 +54,6 @@ def detalle_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
         return HttpResponse(
             f"<h1>Producto {producto_id} no encontrado</h1>",
             status=404,
-        )
-    html = (
-        f"<h1>{producto['nombre']}</h1>"
-        f"<p>Precio: ${producto['precio']:.2f}</p>"
-        f"<p><a href='/productos/'>Volver a la lista</a></p>"
-    )
-    return HttpResponse(html)
+        )       
+    context = {"producto_id": producto_id, "producto": producto}
+    return render(request, "productos/detalle.html", context)

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Página no encontrada{% endblock %}
+
+{% block content %}
+    <h1>Error 404</h1>
+    <p>Lo sentimos, el recurso que buscas no existe en nuestro inventario.</p>
+    <a href="{% url 'productos:lista_productos' %}">Volver al catálogo</a>
+{% endblock %}
