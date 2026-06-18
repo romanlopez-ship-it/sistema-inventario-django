@@ -24,16 +24,34 @@ Hilo conector: "Ciclo cerrado".
 
 Protege las operaciones de escritura con @login_required.
 Hilo conector: "Usuarios reales".
+
+Vistas de la aplicacion productos — Semana 9.
+
+Migra el CRUD de vistas de funcion a Vistas Basadas en Clases (CBV).
+Usa LoginRequiredMixin en lugar de @login_required.
+Hilo conector: "Medir el avance".
 """
 
-from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.decorators import login_required
+#from django.http import HttpRequest, HttpResponse
+#from django.shortcuts import get_object_or_404, redirect, render
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from .forms import ProductoForm
 from .models import Producto
 
-
+#from .models import Producto  # Importamos el modelo Producto para consultas ORM
 '''
 # Datos de ejemplo (sin base de datos — se incorpora en Semana 4)
 PRODUCTOS_EJEMPLO: dict[int, dict] = {
@@ -42,11 +60,72 @@ PRODUCTOS_EJEMPLO: dict[int, dict] = {
     3: {"nombre": "Mouse inalambrico",   "precio": 280.00},
 }
 '''
-
+# Vista de bienvenida (Semana 2)
 def bienvenida(request: HttpRequest) -> HttpResponse:
     """Devuelve la pagina principal del sistema."""
     return render(request, "base.html", {"titulo": "Bienvenido"})
 
+# Actuales vistas de la aplicacion productos — Semana 9. 
+# Migradas a CBV y protegidas con LoginRequiredMixin.
+# Listado y detalle de productos — publicos.
+class ProductoListView(ListView):
+    """Lista todos los productos — publica.
+    
+    Attributes:
+        model: Modelo fuente de datos.
+        template_name: Plantilla a renderizar.
+        context_object_name: Nombre de la variable en la plantilla.
+    """
+    model = Producto
+    template_name = "productos/lista.html"
+    context_object_name = "productos"
+
+class ProductoDetailView(DetailView):
+    """Detalle de un producto — publico.
+    
+    Attributes:
+        pk_url_kwarg: Nombre del parametro de URL ('producto_id').
+    """
+    model = Producto
+    template_name = "productos/detalle.html"
+    context_object_name = "producto"
+    pk_url_kwarg = "producto_id"
+
+# Vistas de creacion, edicion y eliminacion de productos — requieren autenticacion.
+class ProductoCreateView(LoginRequiredMixin, CreateView):
+    """Crear un producto — requiere autenticacion.
+
+    LoginRequiredMixin redirige a LOGIN_URL si no esta autenticado.
+    Debe ser el PRIMER elemento en la cadena de herencia.
+    """
+    model = Producto
+    form_class = ProductoForm
+    template_name = "productos/crear.html"
+    success_url = reverse_lazy("productos:lista")
+
+class ProductoUpdateView(LoginRequiredMixin, UpdateView):
+    """Editar un producto — requiere autenticacion."""
+    model = Producto
+    form_class = ProductoForm
+    template_name = "productos/editar.html"
+    pk_url_kwarg = "producto_id"
+    success_url = reverse_lazy("productos:lista")
+
+class ProductoDeleteView(LoginRequiredMixin, DeleteView):
+    """Eliminar un producto — requiere autenticacion.
+
+    GET  → plantilla de confirmacion.
+    POST → elimina y redirige a success_url.
+    """
+
+    model = Producto
+    template_name = "productos/eliminar.html"
+    pk_url_kwarg = "producto_id"
+    success_url = reverse_lazy("productos:lista")
+
+# Vistas de la aplicacion productos — Semana 3 y 4. 
+# Dejan de ser usadas a partir de la Semana 9, pero se mantienen comentadas para referencia.
+'''
 def lista_productos(request: HttpRequest) -> HttpResponse:
     """Devuelve todos los productos desde la base de datos."""
     productos = Producto.objects.all()
@@ -95,3 +174,4 @@ def eliminar_producto(request: HttpRequest, producto_id: int) -> HttpResponse:
         producto.delete()  # Elimina el producto de la base de datos
         return redirect("productos:lista")
     return render(request, "productos/eliminar.html", {"producto": producto})
+'''
