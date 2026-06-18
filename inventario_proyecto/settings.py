@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'productos',
+    'rest_framework',        # ← agregar esta línea para DRF -- Semana 10
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,12 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 LOGIN_URL           = "/accounts/login/"
 LOGIN_REDIRECT_URL  = "/productos/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
+
+# Al final del archivo: configuración de DRF
+# Configuración de Django REST Framework -- Semana 10
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}
