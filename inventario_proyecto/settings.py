@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@c0c1r6q)9q!=l9f4m0mbx68r-1t#3o71&6igvk#&z*uaef*pu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True   
 
 ALLOWED_HOSTS = []
 
@@ -55,8 +55,8 @@ ROOT_URLCONF = 'inventario_proyecto.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'],   # ← agregar esta línea
+        'APP_DIRS': True,                   # busca también en <app>/templates/
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -122,3 +122,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# inventario_proyecto/settings.py
+
+# Hosts permitidos (desarrollo)
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+
+# Al final del archivo — autenticacion
+LOGIN_URL           = "/accounts/login/"
+LOGIN_REDIRECT_URL  = "/productos/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
