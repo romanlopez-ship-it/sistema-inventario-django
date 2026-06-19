@@ -127,7 +127,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # inventario_proyecto/settings.py
 
 # Hosts permitidos (desarrollo)
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver", "inventario-lopezgonzalez-cbt198.onrender.com"]
 
 # Al final del archivo — autenticacion
 LOGIN_URL           = "/accounts/login/"
