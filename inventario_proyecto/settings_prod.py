@@ -12,7 +12,7 @@ from .settings import *   # noqa: F401,F403 — importar base
 DEBUG      = os.getenv("DEBUG", "False") == "True"
 SECRET_KEY = os.getenv("SECRET_KEY", SECRET_KEY)   # noqa: F405
 ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1"
+    "ALLOWED_HOSTS", 'inventario-lopezgonzalez-cbt198.onrender.com,localhost,127.0.0.1'
 ).split(",")
 
 # ── HTTPS (Render provee HTTPS automaticamente) ───────────────
