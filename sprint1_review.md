@@ -6,10 +6,10 @@
  accesible por URL, con plantillas HTML separadas del código Python."
 
 ### Incremento entregado
-- [x] Vista `lista_productos` con plantilla `lista.html`
-- [x] Vista `detalle_producto` con plantilla `detalle.html`
-- [x] Herencia de `base.html` (header/footer compartidos)
-- [x] Status 404 para productos inexistentes
+- ✅ Vista `lista_productos` con plantilla `lista.html`
+- ✅ Vista `detalle_producto` con plantilla `detalle.html`
+- ✅ Herencia de `base.html` (header/footer compartidos)
+- ✅ Status 404 para productos inexistentes
 
 ### Criterios de aceptación verificados (Gherkin)
 HU-01: Ver lista de productos

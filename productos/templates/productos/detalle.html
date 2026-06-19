@@ -6,5 +6,7 @@
 <h2>{{ producto.nombre }}</h2>
 <p><strong>Precio:</strong> ${{ producto.precio }}</p>
 <p><strong>Stock:</strong> {{ producto.stock }} unidades</p>
-<p><a href="/productos/">← Volver a la lista</a></p>
+<p><a href="/productos/{{ producto.pk }}/editar/">Editar</a> |
+   <a href="/productos/{{ producto.pk }}/eliminar/">Eliminar</a> |
+   <a href="/productos/">← Lista</a></p>
 {% endblock %}

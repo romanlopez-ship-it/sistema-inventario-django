@@ -8,7 +8,10 @@
 {% for p in productos %}
     <li>
         <a href="/productos/{{ p.pk }}/">{{ p.nombre }}</a>
+        | <a href="/productos/{{ p.pk }}/editar/">Editar</a>
+        | <a href="/productos/{{ p.pk }}/eliminar/">Eliminar</a>
         — ${{ p.precio }} | Stock: {{ p.stock }}
+        {% if p.activo %}✓{% else %}✗{% endif %}
     </li>
 {% empty %}
     <li>No hay productos. <a href="/admin/productos/producto/add/">Agregar producto</a>.</li>  

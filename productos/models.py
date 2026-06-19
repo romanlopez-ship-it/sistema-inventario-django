@@ -38,6 +38,12 @@ class Producto(models.Model):
         verbose_name="Fecha de alta",
     )
 
+    # Agregar en models.py, antes del campo 'creado':
+    activo = models.BooleanField(
+        default=True,
+        verbose_name="Activo",
+    )
+
     class Meta:
         verbose_name = "Producto"
         verbose_name_plural = "Productos"

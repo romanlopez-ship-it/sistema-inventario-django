@@ -15,6 +15,6 @@ class ProductoAdmin(admin.ModelAdmin):
         list_filter: filtros laterales en el panel.
     """
 
-    list_display = ["nombre", "precio", "stock", "creado"]
+    list_display = ["nombre", "precio", "stock", "activo", "creado"]
     search_fields = ["nombre"]
     list_filter = ["creado"]

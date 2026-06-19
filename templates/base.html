@@ -9,8 +9,13 @@
         <h1>Sistema de Inventario</h1>
         <nav>
             <a href="/">Inicio</a> |
-            <a href="/productos/">Productos</a> |
-            <a href="/productos/nuevo/">+ Nuevo producto</a>
+            <a href="/productos/">Productos</a>
+            {% if user.is_authenticated %}
+                | <a href="/productos/nuevo/">+ Nuevo producto</a>
+                | <a href="/accounts/logout/">Cerrar sesión ({{ user.username }})</a>
+            {% else %}
+                | <a href="/accounts/login/">Iniciar sesión</a>
+            {% endif %}
         </nav>
     </header>
     <main>
